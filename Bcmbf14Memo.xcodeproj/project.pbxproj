@@ -17,7 +17,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		824D52AF243F855F0020C4DE /* Bcmbf14Memo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Bcmbf14Memo.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		824D52AF243F855F0020C4DE /* Bcmbf14MemoS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Bcmbf14MemoS.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		824D52B2243F855F0020C4DE /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		824D52B4243F855F0020C4DE /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
 		824D52B6243F855F0020C4DE /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -50,7 +50,7 @@
 		824D52B0243F855F0020C4DE /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				824D52AF243F855F0020C4DE /* Bcmbf14Memo.app */,
+				824D52AF243F855F0020C4DE /* Bcmbf14MemoS.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -87,7 +87,7 @@
 			);
 			name = Bcmbf14Memo;
 			productName = Bcmbf14Memo;
-			productReference = 824D52AF243F855F0020C4DE /* Bcmbf14Memo.app */;
+			productReference = 824D52AF243F855F0020C4DE /* Bcmbf14MemoS.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -291,12 +291,13 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = HBXK2UB5Z3;
 				INFOPLIST_FILE = Bcmbf14Memo/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.bcmbf14.Bcmbf14Memo;
-				PRODUCT_NAME = Bcmbf14Memo;
+				PRODUCT_NAME = Bcmbf14MemoS;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -309,12 +310,13 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = HBXK2UB5Z3;
 				INFOPLIST_FILE = Bcmbf14Memo/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.bcmbf14.Bcmbf14Memo;
-				PRODUCT_NAME = Bcmbf14Memo;
+				PRODUCT_NAME = Bcmbf14MemoS;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
