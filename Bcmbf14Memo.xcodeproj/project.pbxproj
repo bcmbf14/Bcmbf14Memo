@@ -296,7 +296,7 @@
 					"@executable_path/Frameworks",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.bcmbf14.Bcmbf14Memo;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = Bcmbf14Memo;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -314,7 +314,7 @@
 					"@executable_path/Frameworks",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.bcmbf14.Bcmbf14Memo;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = Bcmbf14Memo;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
