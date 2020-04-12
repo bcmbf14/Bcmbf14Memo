@@ -76,7 +76,7 @@ ___App Icon___
 
 ___Memo Class___
 
-```
+```swift
 
 import Foundation
 
@@ -115,28 +115,60 @@ ___TableView DataSource___
 5. 델리게이트 구현 
 
 
+```swift
+override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    // #warning Incomplete implementation, return the number of rows
+    return Memo.dummyMemoList.count
+}
+
+
+override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+    let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
+
+    // Configure the cell...
+    let target = Memo.dummyMemoList[indexPath.row]
+    cell.textLabel?.text = target.content
+    cell.detailTextLabel?.text = formatter.string(from: target.insertData)
+    return cell
+}
+
 ```
-    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        // #warning Incomplete implementation, return the number of rows
-        return Memo.dummyMemoList.count
-    }
+# 
 
-    
-    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
-
-        // Configure the cell...
-        let target = Memo.dummyMemoList[indexPath.row]
-        cell.textLabel?.text = target.content
-        cell.detailTextLabel?.text = formatter.string(from: target.insertData)
-        return cell
-    }
-
-```
- 
 _전제조건은 이렇다._
 
 > 테이블뷰는 바보다.
 
+이게 무슨 말이냐면, 테이블뷰에는 필수 메소드인 위에 두 녀석이 있다. 그런데, TableView DataSource는 바보라서 내가 몇개의 셀을 그려야하는지, 셀의 디자인은 어떻게 생긴건지, 어떤 데이터를 넣어야하는지 알지 못한다.  
+# 
+따라서, 똑똑한 내가 그걸 알려줘야 한다. 그럼 데이터 소스는 그걸 어떻게 물어보나? 바로 저 메소드를 필수로 지정해놓고, 저 메소드를 호출해서 "이 메소드에 정답을 알려주세요~ 그러면 제가 그거 보고 그릴게요~" 라고 한다. 
+# 
+추가적으로 TableView Delegate 라는 녀석도 있는데, 이 녀석은 나중에 공부할거지만 얘는 그런 녀석이다. 데이터 소스가 데이터에 관한 정보를 담는 녀석이면 델리게이트는 이벤트에 관한 프로토콜이다. 몇번째 셀을 눌렀는지와 같은 것들 말이다. 따라서 눌러도 이벤트가 없다면 델리게이트를 구현하지 않아도 된다. 
 
 
+# 
+
+___DateFormatter___
+
+원하는 날짜 형식을 사용하기 위해 DateFormatter 객체를 생성한다. 
+
+```swift
+let formatter: DateFormatter = {
+    let f = DateFormatter()
+    f.dateStyle = .long
+    f.timeStyle = .short
+    f.locale = Locale(identifier: "Ko_kr")
+    return f
+}()
+```
+속성을 나중에 넣어주는 것은 귀찮으므로 클로저로 만들어준다. 원하는 데이터 스타일과 시간스타일을 입력한다. 그리고 언어설정을 하지 않으면 기본언어인 영어로 선택이 되기 때문에 언어 설정도 지정해준다. 
+# 
+만들어 놓은 포매터를 사용하는 방법은 formatter.string(from: <Date>)에 넣어주면 되는데 아래와 같다. 
+  
+```swift
+let target = Memo.dummyMemoList[indexPath.row]
+cell.textLabel?.text = target.content
+cell.detailTextLabel?.text = formatter.string(from: target.insertData)
+return cell
+
+```
