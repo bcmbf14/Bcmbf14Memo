@@ -4,9 +4,7 @@ ___배운점과 추가로 공부해야될 부분들 정리___
 
 # 
 
-___Step1___
-  
-#### 프로젝트 생성 
+___프로젝트 생성___
 
 ![image](https://user-images.githubusercontent.com/60660894/79071861-e2718900-7d18-11ea-91ea-c0fe4e1842d8.png)
 
@@ -24,9 +22,8 @@ ___Step1___
 
 # 
 
-___Step2___
+___프로젝트 ___
 
-#### 프로젝트 설정
 
 ![image](https://user-images.githubusercontent.com/60660894/79071930-46944d00-7d19-11ea-95ec-ba27a1ac85cf.png)
 
@@ -58,9 +55,7 @@ ___Step2___
 
 # 
 
-___Step3___
-
-#### App Icon
+___App Icon___
 
 ![image](https://user-images.githubusercontent.com/60660894/79072564-a0e2dd00-7d1c-11ea-8c20-02e0df4c6606.png)
 
@@ -79,11 +74,69 @@ ___Step3___
 
 # 
 
-___Step4___
+___Memo Class___
 
-#### Launch Screen 
+```
+
+import Foundation
+
+class Memo {
+    var content: String
+    var insertData : Date
+    
+    init(content: String){
+        self.content = content
+        insertData = Date()
+    }
+    
+    
+    static var dummyMemoList = [
+        Memo(content: "Lorem Ipsum"),
+        Memo(content: "🥰 + 👍 = ❤️")
+    
+    ]
+}
+
+```
+
+- 메모클래스를 생성했고, 더미데이터를 세팅했다. 
+- 클래스기 때문에 생성자를 만들어주었고, 날짜형식같은경우는 기본 Date형식을 생성해서 넣어주면 되기 때문에 따로 생성자에 넣지 않았다. 
 
 
+# 
+
+___TableView DataSource___
+
+테이블뷰를 구현하는데 단계가 필요하다. 
+1. 테이블뷰 배치 
+2. 프로토타입 셀 디자인, 셀 아이덴티파이어 지정
+3. 데이터소스, 델리게이트 연결
+4. 데이터소스 구현
+5. 델리게이트 구현 
+
+
+```
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        // #warning Incomplete implementation, return the number of rows
+        return Memo.dummyMemoList.count
+    }
+
+    
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
+
+        // Configure the cell...
+        let target = Memo.dummyMemoList[indexPath.row]
+        cell.textLabel?.text = target.content
+        cell.detailTextLabel?.text = formatter.string(from: target.insertData)
+        return cell
+    }
+
+```
+ 
+_전제조건은 이렇다._
+
+> 테이블뷰는 바보다.
 
 
 
