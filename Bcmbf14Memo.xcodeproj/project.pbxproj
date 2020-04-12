@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		823C39C724436D5B00C4CF34 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 823C39C624436D5B00C4CF34 /* Main.storyboard */; };
 		823C39CA24436FB500C4CF34 /* Model.swift in Sources */ = {isa = PBXBuildFile; fileRef = 823C39C924436FB500C4CF34 /* Model.swift */; };
+		823C39CC2443732A00C4CF34 /* MemoListTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 823C39CB2443732900C4CF34 /* MemoListTableViewController.swift */; };
 		824D52B3243F855F0020C4DE /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 824D52B2243F855F0020C4DE /* AppDelegate.swift */; };
 		824D52B5243F855F0020C4DE /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 824D52B4243F855F0020C4DE /* SceneDelegate.swift */; };
 		824D52BD243F855F0020C4DE /* Bcmbf14Memo.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 824D52BB243F855F0020C4DE /* Bcmbf14Memo.xcdatamodeld */; };
@@ -19,6 +20,7 @@
 /* Begin PBXFileReference section */
 		823C39C624436D5B00C4CF34 /* Main.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
 		823C39C924436FB500C4CF34 /* Model.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Model.swift; sourceTree = "<group>"; };
+		823C39CB2443732900C4CF34 /* MemoListTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemoListTableViewController.swift; sourceTree = "<group>"; };
 		824D52AF243F855F0020C4DE /* Bcmbf14MemoS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Bcmbf14MemoS.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		824D52B2243F855F0020C4DE /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		824D52B4243F855F0020C4DE /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -74,6 +76,7 @@
 				824D52C0243F85600020C4DE /* LaunchScreen.storyboard */,
 				824D52C3243F85600020C4DE /* Info.plist */,
 				824D52BB243F855F0020C4DE /* Bcmbf14Memo.xcdatamodeld */,
+				823C39CB2443732900C4CF34 /* MemoListTableViewController.swift */,
 			);
 			path = Bcmbf14Memo;
 			sourceTree = "<group>";
@@ -151,6 +154,7 @@
 			files = (
 				824D52BD243F855F0020C4DE /* Bcmbf14Memo.xcdatamodeld in Sources */,
 				824D52B3243F855F0020C4DE /* AppDelegate.swift in Sources */,
+				823C39CC2443732A00C4CF34 /* MemoListTableViewController.swift in Sources */,
 				824D52B5243F855F0020C4DE /* SceneDelegate.swift in Sources */,
 				823C39CA24436FB500C4CF34 /* Model.swift in Sources */,
 			);
