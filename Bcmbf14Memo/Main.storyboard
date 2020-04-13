@@ -11,7 +11,7 @@
         <!--멍단비 메모-->
         <scene sceneID="14C-gG-ZBP">
             <objects>
-                <tableViewController id="Oxc-kT-hUm" customClass="MemoListTableViewController" customModule="Bcmbf14MemoS" customModuleProvider="target" sceneMemberID="viewController">
+                <tableViewController id="Oxc-kT-hUm" customClass="MemoListTableViewController" customModule="멍단비_메모" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" id="Qzd-DR-fmo">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -62,7 +62,7 @@
         <!--새 메모-->
         <scene sceneID="BRu-7y-Col">
             <objects>
-                <viewController id="3yT-s6-2Zl" customClass="ComposeViewController" customModule="Bcmbf14MemoS" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="3yT-s6-2Zl" customClass="ComposeViewController" customModule="멍단비_메모" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="s6W-Q7-oui">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="842"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -91,8 +91,15 @@
                                 <action selector="close:" destination="3yT-s6-2Zl" id="PYs-MB-jzY"/>
                             </connections>
                         </barButtonItem>
-                        <barButtonItem key="rightBarButtonItem" systemItem="save" id="7Yq-gt-kRN"/>
+                        <barButtonItem key="rightBarButtonItem" systemItem="save" id="7Yq-gt-kRN">
+                            <connections>
+                                <action selector="save:" destination="3yT-s6-2Zl" id="5Lp-n9-pNS"/>
+                            </connections>
+                        </barButtonItem>
                     </navigationItem>
+                    <connections>
+                        <outlet property="memoTextView" destination="59n-7x-4H3" id="hJF-zS-ZaR"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="zbC-C7-wQn" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
