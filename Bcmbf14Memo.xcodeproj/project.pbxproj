@@ -15,6 +15,7 @@
 		824D52BD243F855F0020C4DE /* Bcmbf14Memo.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 824D52BB243F855F0020C4DE /* Bcmbf14Memo.xcdatamodeld */; };
 		824D52BF243F85600020C4DE /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 824D52BE243F85600020C4DE /* Assets.xcassets */; };
 		824D52C2243F85600020C4DE /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 824D52C0243F85600020C4DE /* LaunchScreen.storyboard */; };
+		82FFF0F52444E09F009BF82A /* ComposeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82FFF0F42444E09F009BF82A /* ComposeViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -28,6 +29,7 @@
 		824D52BE243F85600020C4DE /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		824D52C1243F85600020C4DE /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		824D52C3243F85600020C4DE /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		82FFF0F42444E09F009BF82A /* ComposeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComposeViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -77,6 +79,7 @@
 				824D52C3243F85600020C4DE /* Info.plist */,
 				824D52BB243F855F0020C4DE /* Bcmbf14Memo.xcdatamodeld */,
 				823C39CB2443732900C4CF34 /* MemoListTableViewController.swift */,
+				82FFF0F42444E09F009BF82A /* ComposeViewController.swift */,
 			);
 			path = Bcmbf14Memo;
 			sourceTree = "<group>";
@@ -155,6 +158,7 @@
 				824D52BD243F855F0020C4DE /* Bcmbf14Memo.xcdatamodeld in Sources */,
 				824D52B3243F855F0020C4DE /* AppDelegate.swift in Sources */,
 				823C39CC2443732A00C4CF34 /* MemoListTableViewController.swift in Sources */,
+				82FFF0F52444E09F009BF82A /* ComposeViewController.swift in Sources */,
 				824D52B5243F855F0020C4DE /* SceneDelegate.swift in Sources */,
 				823C39CA24436FB500C4CF34 /* Model.swift in Sources */,
 			);
