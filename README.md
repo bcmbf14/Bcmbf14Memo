@@ -4,9 +4,7 @@ ___배운점과 추가로 공부해야될 부분들 정리___
 
 # 
 
-___Step1___
-  
-#### 프로젝트 생성 
+___프로젝트 생성___
 
 ![image](https://user-images.githubusercontent.com/60660894/79071861-e2718900-7d18-11ea-91ea-c0fe4e1842d8.png)
 
@@ -24,9 +22,8 @@ ___Step1___
 
 # 
 
-___Step2___
+___프로젝트 ___
 
-#### 프로젝트 설정
 
 ![image](https://user-images.githubusercontent.com/60660894/79071930-46944d00-7d19-11ea-95ec-ba27a1ac85cf.png)
 
@@ -58,9 +55,7 @@ ___Step2___
 
 # 
 
-___Step3___
-
-#### App Icon
+___App Icon___
 
 ![image](https://user-images.githubusercontent.com/60660894/79072564-a0e2dd00-7d1c-11ea-8c20-02e0df4c6606.png)
 
@@ -79,11 +74,211 @@ ___Step3___
 
 # 
 
-___Step4___
+___Memo Class___
 
-#### Launch Screen 
+```swift
+
+import Foundation
+
+class Memo {
+    var content: String
+    var insertData : Date
+    
+    init(content: String){
+        self.content = content
+        insertData = Date()
+    }
+    
+    
+    static var dummyMemoList = [
+        Memo(content: "Lorem Ipsum"),
+        Memo(content: "🥰 + 👍 = ❤️")
+    
+    ]
+}
+
+```
+
+- 메모클래스를 생성했고, 더미데이터를 세팅했다. 
+- 클래스기 때문에 생성자를 만들어주었고, 날짜형식같은경우는 기본 Date형식을 생성해서 넣어주면 되기 때문에 따로 생성자에 넣지 않았다. 
 
 
+# 
+
+___TableView DataSource___
+
+테이블뷰를 구현하는데 단계가 필요하다. 
+1. 테이블뷰 배치 
+2. 프로토타입 셀 디자인, 셀 아이덴티파이어 지정
+3. 데이터소스, 델리게이트 연결
+4. 데이터소스 구현
+5. 델리게이트 구현 
 
 
+```swift
+override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    // #warning Incomplete implementation, return the number of rows
+    return Memo.dummyMemoList.count
+}
 
+
+override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+    let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
+
+    // Configure the cell...
+    let target = Memo.dummyMemoList[indexPath.row]
+    cell.textLabel?.text = target.content
+    cell.detailTextLabel?.text = formatter.string(from: target.insertData)
+    return cell
+}
+
+```
+# 
+
+_전제조건은 이렇다._
+
+> 테이블뷰는 바보다.
+
+이게 무슨 말이냐면, 테이블뷰에는 필수 메소드인 위에 두 녀석이 있다. 그런데, TableView DataSource는 바보라서 내가 몇개의 셀을 그려야하는지, 셀의 디자인은 어떻게 생긴건지, 어떤 데이터를 넣어야하는지 알지 못한다.  
+# 
+따라서, 똑똑한 내가 그걸 알려줘야 한다. 그럼 데이터 소스는 그걸 어떻게 물어보나? 바로 저 메소드를 필수로 지정해놓고, 저 메소드를 호출해서 "이 메소드에 정답을 알려주세요~ 그러면 제가 그거 보고 그릴게요~" 라고 한다. 
+# 
+추가적으로 TableView Delegate 라는 녀석도 있는데, 이 녀석은 나중에 공부할거지만 얘는 그런 녀석이다. 데이터 소스가 데이터에 관한 정보를 담는 녀석이면 델리게이트는 이벤트에 관한 프로토콜이다. 몇번째 셀을 눌렀는지와 같은 것들 말이다. 따라서 눌러도 이벤트가 없다면 델리게이트를 구현하지 않아도 된다. 
+
+
+# 
+
+___DateFormatter___
+
+원하는 날짜 형식을 사용하기 위해 DateFormatter 객체를 생성한다. 
+
+```swift
+let formatter: DateFormatter = {
+    let f = DateFormatter()
+    f.dateStyle = .long
+    f.timeStyle = .short
+    f.locale = Locale(identifier: "Ko_kr")
+    return f
+}()
+```
+속성을 나중에 넣어주는 것은 귀찮으므로 클로저로 만들어준다. 원하는 데이터 스타일과 시간스타일을 입력한다. 그리고 언어설정을 하지 않으면 기본언어인 영어로 선택이 되기 때문에 언어 설정도 지정해준다. 
+# 
+만들어 놓은 포매터를 사용하는 방법은 formatter.string(from: <Date>)에 넣어주면 되는데 아래와 같다. 
+  
+```swift
+let target = Memo.dummyMemoList[indexPath.row]
+cell.textLabel?.text = target.content
+cell.detailTextLabel?.text = formatter.string(from: target.insertData)
+return cell
+
+```
+
+# 
+
+___***Add Memo, List Update___
+
+재밌는게 있다. 어찌보면 매우 유의할 점이다. iOS13부터 프레젠트 모달 방식이 새로 생겼다. sheet 타입이다. 그래서 기존처럼 동작하게 하려면 따로 full screen 타입을 지정해주어야 한다.
+# 
+![image](https://user-images.githubusercontent.com/60660894/79151747-f646e900-7e05-11ea-9915-40c8ba71cd6a.png)
+# 
+그런데 문제가 되는 점은, 기존처럼 똑같이 작업을 하는데 
+
+```swift
+
+@IBAction func save(_ sender: Any) {
+
+    guard let memo = memoTextView.text, memo.count > 0 else {
+        alert(message: "메모를 입력하세요.")
+        return
+    }
+
+    let newMemo = Memo(content: memo)
+    Memo.dummyMemoList.append(newMemo)
+
+    dismiss(animated: true, completion: nil)
+}
+    
+```
+위와 같이 메모를 추가해주는 action을 지정해도 모달 방식이 sheet 타입으로 지정되어 있으면 동작을 안한다는 것이다. 또한, full screen 타입으로 지정하고 시뮬레이터를 ios 13이전의 버전(11.0~12.0처럼)으로 실행해보면 런치스크린 화면 후에 아래 사진과 같은 에러가 발생한다. 
+# 
+![image](https://user-images.githubusercontent.com/60660894/79151769-02cb4180-7e06-11ea-8f8f-fec22983a9eb.png)
+![image](https://user-images.githubusercontent.com/60660894/79151796-14ace480-7e06-11ea-8225-f48fd549975c.png)
+#
+이유는 이렇다. 아래 코드처럼 우리는 SceneDelegate를 iOS 13.0 버전 이상에서만 실행하게 했고, 따라서 윈도우 객체가 생성되지 않은 것이다. 윈도우 객체가 없으니 아무런 화면도 보이지 않은 거지. 
+
+```swift
+
+@available(iOS 13.0, *)
+class SceneDelegate: UIResponder, UIWindowSceneDelegate {
+
+    var window: UIWindow?
+    
+```
+
+그래서 아래처럼 AppDelegate에도 똑같이 윈도우 객체를 생성해주어야 한다. 
+
+```swift
+
+@UIApplicationMain
+class AppDelegate: UIResponder, UIApplicationDelegate {
+
+    var window: UIWindow?
+    
+```
+
+또한, 아직 해결되지 않은 프레젠트 모달방식으로 메모를 추가할 때 테이블뷰가 리로드 되지 않는 문제를 해결해야 한다. 여기서 문제의 핵심은 _save_ 메소드가 실행되지 않는게 아니다. 바로 페이지가 닫혀서 다시 이전 뷰컨트롤러로 돌아왔음에도 _viewWillAppear(:)_ 메소드가 불리지 않는다는 것이 핵심이다. 즉, 화면전환을 처리하는 방식이 달라졌다는 뜻이다. 이 문제는 노티피케이션으로 해결해야한다. 
+
+1. 노티피케이션을 생성한다. 
+```swift
+
+extension ComposeViewController {
+    static let newMemoDidInsert = Notification.Name(rawValue: "newMemoDidInsert")
+    
+}
+
+```
+2. 메모가 저장되서 뷰가 사라지기전에 노티피케이션을 송출한다. 
+```swift
+
+    @IBAction func save(_ sender: Any) {
+
+        guard let memo = memoTextView.text, memo.count > 0 else {
+            alert(message: "메모를 입력하세요.")
+            return
+        }
+
+        let newMemo = Memo(content: memo)
+        Memo.dummyMemoList.append(newMemo)
+        
+        NotificationCenter.default.post(name: ComposeViewController.newMemoDidInsert, object: nil)
+        
+        dismiss(animated: true, completion: nil)
+    }
+    
+```
+3. 노티피케이션을 받을 뷰컨트롤러로 돌아가서 노티피케이션을 구독해준다.(마치 송출된 라디오의 주파수를 맞추는 느낌)
+  - 그런데 여기서 중요한 점이 있다. 옵져버를 등록만하고 없애주지 않으면 메모리가 낭비된다. 따라서 노티피케이션을 해제하는 작업도 처리해주어야 한다. 
+  - 노티피케이션을 구독하는 addObserver는 노티피케이션 구독을 해제할때 필요한 객체를 반환한다. NSObjectProtocol. 그걸 보통 토큰이라고 부른다. 
+  - 그래서 우리는 token이라는 옵셔널 변수를 만들고 소멸자에서 토큰이 존재한다면 (노티가 살아있는거니까) removeObserver(token) 처리를 해준다. 
+  - 이렇게되면, 해당 뷰컨트롤러가 메모리에서 사라질 때 노피티케이션도 구독해제되어 메모리 낭비가 없어질 것이다. 
+```swift
+
+    var token: NSObjectProtocol?
+    
+    deinit {
+        if let token = token {
+            NotificationCenter.default.removeObserver(token)
+        }
+    }
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        //ui작업이므로 메인쓰레드에서 작업해야 한다.
+        //quere이후의 using작업이 quere에서 지정한 쓰레드에서 동작한다.
+        token = NotificationCenter.default.addObserver(forName: ComposeViewController.newMemoDidInsert, object: nil, queue:   
+        OperationQueue.main) { [weak self] (noti) in
+            self?.tableView.reloadData()
+        }
+        
+```
