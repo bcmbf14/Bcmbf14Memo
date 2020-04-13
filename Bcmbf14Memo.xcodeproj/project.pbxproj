@@ -22,7 +22,7 @@
 		823C39C624436D5B00C4CF34 /* Main.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
 		823C39C924436FB500C4CF34 /* Model.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Model.swift; sourceTree = "<group>"; };
 		823C39CB2443732900C4CF34 /* MemoListTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemoListTableViewController.swift; sourceTree = "<group>"; };
-		824D52AF243F855F0020C4DE /* Bcmbf14MemoS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Bcmbf14MemoS.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		824D52AF243F855F0020C4DE /* 멍단비 메모.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "멍단비 메모.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		824D52B2243F855F0020C4DE /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		824D52B4243F855F0020C4DE /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
 		824D52BC243F855F0020C4DE /* Bcmbf14Memo.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Bcmbf14Memo.xcdatamodel; sourceTree = "<group>"; };
@@ -62,7 +62,7 @@
 		824D52B0243F855F0020C4DE /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				824D52AF243F855F0020C4DE /* Bcmbf14MemoS.app */,
+				824D52AF243F855F0020C4DE /* 멍단비 메모.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -101,7 +101,7 @@
 			);
 			name = Bcmbf14Memo;
 			productName = Bcmbf14Memo;
-			productReference = 824D52AF243F855F0020C4DE /* Bcmbf14MemoS.app */;
+			productReference = 824D52AF243F855F0020C4DE /* 멍단비 메모.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -305,7 +305,7 @@
 					"@executable_path/Frameworks",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.bcmbf14.Bcmbf14Memo;
-				PRODUCT_NAME = Bcmbf14MemoS;
+				PRODUCT_NAME = "멍단비 메모";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -324,7 +324,7 @@
 					"@executable_path/Frameworks",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.bcmbf14.Bcmbf14Memo;
-				PRODUCT_NAME = Bcmbf14MemoS;
+				PRODUCT_NAME = "멍단비 메모";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};

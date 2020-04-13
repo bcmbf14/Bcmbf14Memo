@@ -8,7 +8,7 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
-        <!--Bcmbf14Memo-->
+        <!--멍단비 메모-->
         <scene sceneID="14C-gG-ZBP">
             <objects>
                 <tableViewController id="Oxc-kT-hUm" customClass="MemoListTableViewController" customModule="Bcmbf14MemoS" customModuleProvider="target" sceneMemberID="viewController">
@@ -47,7 +47,7 @@
                             <outlet property="delegate" destination="Oxc-kT-hUm" id="JOU-1f-ZLu"/>
                         </connections>
                     </tableView>
-                    <navigationItem key="navigationItem" title="Bcmbf14Memo" id="rKc-vq-1QW">
+                    <navigationItem key="navigationItem" title="멍단비 메모" id="rKc-vq-1QW">
                         <barButtonItem key="rightBarButtonItem" systemItem="add" id="hA6-v1-Pt1">
                             <connections>
                                 <segue destination="DnT-cM-TTz" kind="presentation" id="tB8-Uj-zdj"/>
@@ -86,7 +86,11 @@
                         <viewLayoutGuide key="safeArea" id="WyV-t1-zhR"/>
                     </view>
                     <navigationItem key="navigationItem" title="새 메모" id="c2b-Ds-NRP">
-                        <barButtonItem key="leftBarButtonItem" systemItem="cancel" id="IOh-yp-kpr"/>
+                        <barButtonItem key="leftBarButtonItem" systemItem="cancel" id="IOh-yp-kpr">
+                            <connections>
+                                <action selector="close:" destination="3yT-s6-2Zl" id="PYs-MB-jzY"/>
+                            </connections>
+                        </barButtonItem>
                         <barButtonItem key="rightBarButtonItem" systemItem="save" id="7Yq-gt-kRN"/>
                     </navigationItem>
                 </viewController>
