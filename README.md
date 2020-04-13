@@ -172,3 +172,113 @@ cell.detailTextLabel?.text = formatter.string(from: target.insertData)
 return cell
 
 ```
+
+# 
+
+___***Add Memo, List Update___
+
+재밌는게 있다. 어찌보면 매우 유의할 점이다. iOS13부터 프레젠트 모달 방식이 새로 생겼다. sheet 타입이다. 그래서 기존처럼 동작하게 하려면 따로 full screen 타입을 지정해주어야 한다.
+# 
+![image](https://user-images.githubusercontent.com/60660894/79151747-f646e900-7e05-11ea-9915-40c8ba71cd6a.png)
+# 
+그런데 문제가 되는 점은, 기존처럼 똑같이 작업을 하는데 
+
+```swift
+
+@IBAction func save(_ sender: Any) {
+
+    guard let memo = memoTextView.text, memo.count > 0 else {
+        alert(message: "메모를 입력하세요.")
+        return
+    }
+
+    let newMemo = Memo(content: memo)
+    Memo.dummyMemoList.append(newMemo)
+
+    dismiss(animated: true, completion: nil)
+}
+    
+```
+위와 같이 메모를 추가해주는 action을 지정해도 모달 방식이 sheet 타입으로 지정되어 있으면 동작을 안한다는 것이다. 또한, full screen 타입으로 지정하고 시뮬레이터를 ios 13이전의 버전(11.0~12.0처럼)으로 실행해보면 런치스크린 화면 후에 아래 사진과 같은 에러가 발생한다. 
+# 
+![image](https://user-images.githubusercontent.com/60660894/79151769-02cb4180-7e06-11ea-8f8f-fec22983a9eb.png)
+![image](https://user-images.githubusercontent.com/60660894/79151796-14ace480-7e06-11ea-8225-f48fd549975c.png)
+#
+이유는 이렇다. 아래 코드처럼 우리는 SceneDelegate를 iOS 13.0 버전 이상에서만 실행하게 했고, 따라서 윈도우 객체가 생성되지 않은 것이다. 윈도우 객체가 없으니 아무런 화면도 보이지 않은 거지. 
+
+```swift
+
+@available(iOS 13.0, *)
+class SceneDelegate: UIResponder, UIWindowSceneDelegate {
+
+    var window: UIWindow?
+    
+```
+
+그래서 아래처럼 AppDelegate에도 똑같이 윈도우 객체를 생성해주어야 한다. 
+
+```swift
+
+@UIApplicationMain
+class AppDelegate: UIResponder, UIApplicationDelegate {
+
+    var window: UIWindow?
+    
+```
+
+또한, 아직 해결되지 않은 프레젠트 모달방식으로 메모를 추가할 때 테이블뷰가 리로드 되지 않는 문제를 해결해야 한다. 여기서 문제의 핵심은 _save_ 메소드가 실행되지 않는게 아니다. 바로 페이지가 닫혀서 다시 이전 뷰컨트롤러로 돌아왔음에도 _viewWillAppear(:)_ 메소드가 불리지 않는다는 것이 핵심이다. 즉, 화면전환을 처리하는 방식이 달라졌다는 뜻이다. 이 문제는 노티피케이션으로 해결해야한다. 
+
+1. 노티피케이션을 생성한다. 
+```swift
+
+extension ComposeViewController {
+    static let newMemoDidInsert = Notification.Name(rawValue: "newMemoDidInsert")
+    
+}
+
+```
+2. 메모가 저장되서 뷰가 사라지기전에 노티피케이션을 송출한다. 
+```swift
+
+    @IBAction func save(_ sender: Any) {
+
+        guard let memo = memoTextView.text, memo.count > 0 else {
+            alert(message: "메모를 입력하세요.")
+            return
+        }
+
+        let newMemo = Memo(content: memo)
+        Memo.dummyMemoList.append(newMemo)
+        
+        NotificationCenter.default.post(name: ComposeViewController.newMemoDidInsert, object: nil)
+        
+        dismiss(animated: true, completion: nil)
+    }
+    
+```
+3. 노티피케이션을 받을 뷰컨트롤러로 돌아가서 노티피케이션을 구독해준다.(마치 송출된 라디오의 주파수를 맞추는 느낌)
+  - 그런데 여기서 중요한 점이 있다. 옵져버를 등록만하고 없애주지 않으면 메모리가 낭비된다. 따라서 노티피케이션을 해제하는 작업도 처리해주어야 한다. 
+  - 노티피케이션을 구독하는 addObserver는 노티피케이션 구독을 해제할때 필요한 객체를 반환한다. NSObjectProtocol. 그걸 보통 토큰이라고 부른다. 
+  - 그래서 우리는 token이라는 옵셔널 변수를 만들고 소멸자에서 토큰이 존재한다면 (노티가 살아있는거니까) removeObserver(token) 처리를 해준다. 
+  - 이렇게되면, 해당 뷰컨트롤러가 메모리에서 사라질 때 노피티케이션도 구독해제되어 메모리 낭비가 없어질 것이다. 
+```swift
+
+    var token: NSObjectProtocol?
+    
+    deinit {
+        if let token = token {
+            NotificationCenter.default.removeObserver(token)
+        }
+    }
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        //ui작업이므로 메인쓰레드에서 작업해야 한다.
+        //quere이후의 using작업이 quere에서 지정한 쓰레드에서 동작한다.
+        token = NotificationCenter.default.addObserver(forName: ComposeViewController.newMemoDidInsert, object: nil, queue:   
+        OperationQueue.main) { [weak self] (noti) in
+            self?.tableView.reloadData()
+        }
+        
+```
