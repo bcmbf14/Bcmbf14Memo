@@ -33,6 +33,18 @@ class MemoListTableViewController: UITableViewController {
         }
     }
     
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if let cell = sender as? UITableViewCell, let indexPath = tableView.indexPath(for: cell){
+            if let vc = segue.destination as? DetailViewController{
+                vc.memo = Memo.dummyMemoList[indexPath.row]
+            }
+        }
+        
+    }
+    
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -41,10 +53,6 @@ class MemoListTableViewController: UITableViewController {
         token = NotificationCenter.default.addObserver(forName: ComposeViewController.newMemoDidInsert, object: nil, queue: OperationQueue.main) { [weak self] (noti) in
             self?.tableView.reloadData()
         }
-        
-        
-        
-        
         
         // Uncomment the following line to preserve selection between presentations
         // self.clearsSelectionOnViewWillAppear = false
