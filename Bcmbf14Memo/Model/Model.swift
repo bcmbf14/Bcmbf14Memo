@@ -8,21 +8,21 @@
 
 import Foundation
 
-class Memo {
-    var content: String
-    var insertData : Date
-    
-    init(content: String){
-        self.content = content
-        insertData = Date()
-    }
-    
-    
-    static var dummyMemoList = [
-        Memo(content: "Hello world"),
-        Memo(content: "🥰 + 👍 = ❤️")
-    
-    ]
-}
+//class Memo {
+//    var content: String
+//    var insertData : Date
+//    
+//    init(content: String){
+//        self.content = content
+//        insertData = Date()
+//    }
+//    
+//    
+//    static var dummyMemoList = [
+//        Memo(content: "Hello world"),
+//        Memo(content: "🥰 + 👍 = ❤️")
+//    
+//    ]
+//}
 
 
