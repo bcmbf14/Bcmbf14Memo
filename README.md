@@ -282,3 +282,28 @@ extension ComposeViewController {
         }
         
 ```
+
+
+# 
+
+___테이블뷰셀 동적높이조절___
+
+기본적으로 테이블뷰의 디폴트셀을 만들게되면, 높이는 자동으로 조절이 되는 것 같다. 이것을 self-sizing cell이라고 한다. 내가 생각했던 것보다 공식문서가 진짜 어마무시하게 잘되어있다. 영어만 잘했어도 진짜.. 흐으.. 배움의 수준이 다를텐데. 어쨋건 영어야 하면 되는거고 여기에 [링크](https://developer.apple.com/library/archive/documentation/UserExperience/Conceptual/AutolayoutPG/WorkingwithSelf-SizingTableViewCells.html#//apple_ref/doc/uid/TP40010853-CH25-SW1)가 있다. 공부를 하도록 하자. 
+
+내가 생각하기엔 이게 커스텀셀에는 유효하지 않은 것 같고, iOS에서 제공해주는 기본 셀이라서 자동으로 체크가 되어있는 것 같다. 
+![image](https://user-images.githubusercontent.com/60660894/79479798-41e8d500-8048-11ea-98e8-6ac5fb39e851.png)
+
+일단 오토매틱으로 체크가 되어있으니, 레이블을 선택하고 attribute inspector에서 lines를 0으로 지정해주면 되겠다. 커스텀 셀을 사용할 때에는 오토레이아웃도 잘 잡아놔야 정상동작한다. 제약조건이 제대로 설정되어있지 않으면 컨텐츠의 크기에 맞게 셀의 높이가 동적으로 변경되지 않을 수 있다. 
+
+# 
+
+___LineBreakMode___
+
+또 하나 배운게 이제 LineBreakMode인데, 굉장히 어떻게보면 디테일한 부분이다. 이름 그대로 레이블의 텍스트가 라인을 넘어가게되면 어떻게 처리해줄지에 관한 내용인데 ...을 앞에 해주거나 가운데해주거나 끝에해주거나같은 속성도 있고, 또 뭐 특정 단어에서 끝에 걸린다고하면 바로 줄바꿈을 해준다던지(word wrap)하는 속성이 있다. 해당 [링크](https://developer.apple.com/documentation/uikit/nslinebreakmode)에서 추가로 공부해보도록 하자. 
+
+
+
+
+
+
+
