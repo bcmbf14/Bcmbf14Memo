@@ -73,7 +73,11 @@
                             <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ZQn-Qw-OwF">
                                 <rect key="frame" x="0.0" y="813" width="414" height="49"/>
                                 <items>
-                                    <barButtonItem title="Item" id="fAR-XD-5Mz"/>
+                                    <barButtonItem title="Item" systemItem="compose" id="fAR-XD-5Mz">
+                                        <connections>
+                                            <segue destination="DnT-cM-TTz" kind="presentation" id="4SB-vL-7No"/>
+                                        </connections>
+                                    </barButtonItem>
                                 </items>
                             </toolbar>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" allowsSelection="NO" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="aF4-qU-fHw">
@@ -133,6 +137,9 @@
                         <viewLayoutGuide key="safeArea" id="gLt-fo-tPe"/>
                     </view>
                     <navigationItem key="navigationItem" largeTitleDisplayMode="never" id="L8G-84-kfL"/>
+                    <connections>
+                        <outlet property="memoTableView" destination="aF4-qU-fHw" id="3Wv-2K-NiM"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="x5Z-JD-8Fd" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
@@ -189,7 +196,7 @@
             <objects>
                 <navigationController id="DVw-7f-AwN" sceneMemberID="viewController">
                     <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" largeTitles="YES" id="bfc-pd-OJH">
-                        <rect key="frame" x="0.0" y="44" width="414" height="104.5"/>
+                        <rect key="frame" x="0.0" y="44" width="414" height="96"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
                     <connections>
@@ -219,4 +226,7 @@
             <point key="canvasLocation" x="953.62318840579712" y="-500.22321428571428"/>
         </scene>
     </scenes>
+    <inferredMetricsTieBreakers>
+        <segue reference="4SB-vL-7No"/>
+    </inferredMetricsTieBreakers>
 </document>

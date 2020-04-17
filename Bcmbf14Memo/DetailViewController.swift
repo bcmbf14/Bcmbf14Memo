@@ -10,6 +10,8 @@ import UIKit
 
 class DetailViewController: UIViewController {
     
+    @IBOutlet weak var memoTableView: UITableView!
+    
     var memo: Memo? //뷰디드로드가 될때는 메모리가 생성되지 않았으므로 옵셔널 
     
     let formatter: DateFormatter = {
@@ -19,11 +21,28 @@ class DetailViewController: UIViewController {
         f.locale = Locale(identifier: "Ko_kr")
         return f
     }()
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if let vc = segue.destination.children.first as? ComposeViewController{
+            vc.editTarget = memo
+        }
+    }
 
+    
+    var token: NSObjectProtocol?
+    
+    deinit {
+        if let token = token {
+            NotificationCenter.default.removeObserver(token)
+        }
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        // Do any additional setup after loading the view.
+        token = NotificationCenter.default.addObserver(forName: ComposeViewController.memoDidChange, object: nil, queue: OperationQueue.main, using: { [weak self] (noti) in
+            self?.memoTableView.reloadData()
+        })
     }
     
 
