@@ -467,8 +467,16 @@ class DataManager {
 
 ___메모 편집___
 
+그리고 인상적이었떤 부분이 메모 편집부분인데, 나였으면 분명히 그냥 뷰컨트롤러 새로 만들었을 거임. 어려워서ㅋㅋ    
+일단 시작해보면 음 iOS13부터 프레젠트모델 방식이 sheet타입이 새로 나왔지요. 그래서 지금 할일은 sheet타입의 모달을 pull down 했을 때, 메모를 저장할지 말지를 알랏창을 띄워주는 그런것들을 하려고 하지요. 
 
+```
+isModalInPresentation
+A Boolean value indicating whether the view controller enforces a modal behavior.
+```
+위에 이녀석을 활용할겁니다. 설명하자면 풀다운 했을 때, 이녀석이 false면 뭐 원래그랬듯이 잘내려가고 true이면 뷰컨이 안닫히고 다 안내려가는거죠. 그리고 이것과 연결된 델리게이트인 UIAdaptivePresentationControllerDelegate의 presentationControllerDidAttemptToDismiss 메소드에서 어떤 일처리를 해주면 됩니다. 정확한 동작은 [예시링크](https://zeddios.tistory.com/831)가 있으니 참고. 
 
-
-
+기능의 플로우는 아래와 같아요.
+![image](https://user-images.githubusercontent.com/60660894/79618441-041da680-8145-11ea-95dd-8d6f53db1f7b.png)
+원래 어 메모리스트가 있고, 우상단 Add를 누르면 새 메모 화면으로 갔고, 리스트를 누르면 메모를 읽을수만 있고 편집할 수 없는 화면으로 갔었지요. 근데 그
 
