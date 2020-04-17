@@ -27,6 +27,7 @@ class DataManager {
     func fetchMemo() {
         let request: NSFetchRequest<Memo> = Memo.fetchRequest()
         
+        
         let sortByDateDesc = NSSortDescriptor(key: "insertDate", ascending: false)
         request.sortDescriptors = [sortByDateDesc]
         
@@ -35,6 +36,20 @@ class DataManager {
         }catch {
             print(error)
         }
+    }
+    
+    
+    func addNewMemo(_ memo: String?){
+        let newMemo = Memo(context: mainContext)
+        newMemo.content = memo
+        newMemo.insertDate = Date()
+        
+        
+//        메모를 등록하고 다시 테이블뷰가 로드되는 과정에서 fetchMemo를 호출하는 방법도 있지만,
+//        그것보다는 이렇게 배열에 추가해주는 것이 더 효율적이다. 날짜최신순이므로 append 대신 insert를 활용한다.
+        memoList.insert(newMemo, at: 0)
+        
+        saveContext()
     }
     
     

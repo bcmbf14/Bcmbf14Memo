@@ -55,6 +55,7 @@ class MemoListTableViewController: UITableViewController {
         //ui작업이므로 메인쓰레드에서 작업해야 한다.
         //quere이후의 using작업이 quere에서 지정한 쓰레드에서 동작한다.
         token = NotificationCenter.default.addObserver(forName: ComposeViewController.newMemoDidInsert, object: nil, queue: OperationQueue.main) { [weak self] (noti) in
+            
             self?.tableView.reloadData()
         }
         
