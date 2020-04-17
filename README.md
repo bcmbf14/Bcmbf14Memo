@@ -320,3 +320,155 @@ ___접기펼치기테스트___
 괜찮네..ㅎㅎ 
 
 </details>
+
+
+# 
+
+
+___CoreData___
+
+데이터를 저장할 떄, iOS에서는 CoreData를 사용하지요. 저도 이제껏 한번도 써본 적이 없는데 이번에 처음 써본?다긴보단 따라서 만들어봤습니다. 
+
+프로젝트를 생성할 때, CoreData를 체크해주면 관련 메소드들이나 파일이 생겨납니다. 만약에 체크해주지 않았을 경우에는 NewFile에서 DataModel을 이라는 파일을 따로 생성해줘야해요. 그리고 persistentContainer 변수나 saveContext()같은 기본 메소드도 따로 구현해주어야 합니다. 
+
+# 
+데이터를 지정하려면 만든 name.xcdatamodeld에 들어가서 원하는 설계도를 설계하면 됩니다. ENTITIES에 기본은 entity라고 되어있는데 이걸 이름도 바꿔주고 속성을 지정해줍니다.
+![image](https://user-images.githubusercontent.com/60660894/79617290-164a1580-8142-11ea-954d-374188ab8031.png)
+유의할 점은 이렇게 만들어진 모델은 Class Definition이 됩니다. 따라서 이미 같은 이름의 클래스가 있다면 컴파일 에러가 발생하겠죠.
+
+# 
+아 그리고, 객체로 만든 entity는 삭제할 수 있습니다. 찾기가 제법 힘들지만 적어두도록 하겠습니다.
+```
+
+1. right click on the .xcdatamodel file
+2. click "show in finder"
+3. right click and "show package contents"
+4. open file "contents" which is XML and delete the entity you don't want any more.
+
+```
+일단 이렇게 지정을 했으면 이걸 써야하는데, 보통 DataManager라고 따로 만들어서들 사용합니다.
+그래서 따로 만들고, 아래와 같은 식으로 싱글톤으로 지정하죠. 그리고 나서는 SceneDelegate에서 코어데이터 저장관련 메소드를 싱글톤으로 따로 만들었기 떄문에 수정해줍니다. 해당 메소드는 가져오고, 불리는 방법만 바꿔주죠. 이 부분은 공부를 더 해야함. 
+
+```swift
+
+import Foundation
+import CoreData
+
+
+class DataManager {
+    
+    static let shared = DataManager()
+    private init(){
+        
+    }
+    
+    func sceneDidEnterBackground(_ scene: UIScene) {
+        // Called as the scene transitions from the foreground to the background.
+        // Use this method to save data, release shared resources, and store enough scene-specific state information
+        // to restore the scene back to its current state.
+
+        // Save changes in the application's managed object context when the application transitions to the background.
+        DataManager.shared.saveContext()
+    }    
+   
+```
+
+그리고 이제 기본으로 만들어지는 메소드를 한번 볼건데,, 음 뭔말인지는 잘 모르겠어요.     
+persistentContainer라.. 집요한?계속머무르는?컨테이너라는데 그냥 어떤 상자가 있고 이제 그거를 로드해야되는데 로드가 안되면 에러나고 그런가봐요. 그리고 saveContext() 같은 경우에는 그렇게 만들어진 상자에서 context라는 데이터를 갖고있는데 이제 그걸 저장해주는 메소드다. 뭐 그렇게 간단하게 넘어갈게요. 
+
+```swift
+
+// MARK: - Core Data stack
+
+     lazy var persistentContainer: NSPersistentContainer = {
+      
+         let container = NSPersistentContainer(name: "Bcmbf14Memo")
+         container.loadPersistentStores(completionHandler: { (storeDescription, error) in
+             if let error = error as NSError? {
+       
+                 fatalError("Unresolved error \(error), \(error.userInfo)")
+             }
+         })
+         return container
+     }()
+
+     // MARK: - Core Data Saving support
+
+     func saveContext () {
+         let context = persistentContainer.viewContext
+         if context.hasChanges {
+             do {
+                 try context.save()
+             } catch {
+                 let nserror = error as NSError
+                 fatalError("Unresolved error \(nserror), \(nserror.userInfo)")
+             }
+         }
+     }
+
+```
+
+그러면 이제 진짜로 사용해볼건데, 컨텍스트라는걸 만들거에요. 따로 커스텀해서 만들수도 있다고는 합니다. 그 컨텍스트에서는 fetch라던지 그런 기본적인 기능들을 제공하지요. 
+그리고 생성된 데이터를 담아놓을 memoList라는 배열을 만들거고 패치할 fetchMemo()메소드와 addNewMemo()메소드도 만들어줍니다. 
+
+```swift
+
+class DataManager {
+    
+    static let shared = DataManager()
+    private init(){
+        
+    }
+    
+    var mainContext : NSManagedObjectContext {
+        return persistentContainer.viewContext
+    }
+    
+    
+    var memoList = [Memo]()
+    
+    func fetchMemo() {
+        let request: NSFetchRequest<Memo> = Memo.fetchRequest()
+        
+        
+        let sortByDateDesc = NSSortDescriptor(key: "insertDate", ascending: false)
+        request.sortDescriptors = [sortByDateDesc]
+        
+        do {
+            memoList = try mainContext.fetch(request)
+        }catch {
+            print(error)
+        }
+    }
+    
+    
+    func addNewMemo(_ memo: String?){
+        let newMemo = Memo(context: mainContext)
+        newMemo.content = memo
+        newMemo.insertDate = Date()
+        
+        
+//        메모를 등록하고 다시 테이블뷰가 로드되는 과정에서 fetchMemo를 호출하는 방법도 있지만,
+//        그것보다는 이렇게 배열에 추가해주는 것이 더 효율적이다. 날짜최신순이므로 append 대신 insert를 활용한다.
+        memoList.insert(newMemo, at: 0)
+        
+        saveContext()
+    }
+    
+```
+
+주석에 적어놓았으니 대략 생략할건데, 기본적으로 제공되는 리퀘스트를 만들었고 데이터베이스에서는 기본적으로 정렬을 제공하지 않는다고해서 내림차순으로 정렬을 해주었고, 컨텍스트에 fetch라는 메소드를 이용해서 memoList에 데이터를 넣어주었습니다.
+# 
+저장같은 경우도 Memo라는 클래스가 이미 만들어져있어서 거기에 아까 만들어둔 컨텍스트를 넣고 거기의 컨텐츠로 파라미터로 들어온 데이터를 넣어줍니다. 그리고 저장하기위해 기본 메소드인 saveContext()를 사용합니다. 
+
+
+# 
+
+
+___메모 편집___
+
+
+
+
+
+
