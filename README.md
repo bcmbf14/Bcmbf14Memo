@@ -480,7 +480,179 @@ A Boolean value indicating whether the view controller enforces a modal behavior
 ![image](https://user-images.githubusercontent.com/60660894/79618441-041da680-8145-11ea-95dd-8d6f53db1f7b.png)
 원래 어 메모리스트가 있고, 우상단 Add를 누르면 새 메모 화면으로 갔고, 리스트를 누르면 메모를 읽을수만 있고 편집할 수 없는 화면으로 갔었지요. 근데 지금 할 일은 그 읽을수만 있는 화면 아래에 편집버튼(Compose)을 하나 만들고 그걸 탭하면 기존에 Add를 했던 화면에 내가 지금 가지고 있는 메모 데이터를 출력해서 수정할 수 있게 하려는 겁니다요. 
 
-ㄱ
-원래 어 메모리스트가 있고, 우상단 Add를 누르면 새 메모 화면으로 갔고, 리스트를 누르면 메모를 읽을수만 있고 편집할 수 없는 화면으로 갔었지요. 근데 지금 할 일은 그 읽을수만 있는 화면 아래에 편집버튼(Compose)을 하나 만들고 그걸 탭하면 기존에 Add를 했던 화면에 내가 지금 가지고 있는 메모 데이터를 출력해서 수정할 수 있게 하려는 겁니다요.
 # 
+
+DetailViewController에서는 prepare메소드를 이용해서 새 메모화면에 데이터를 세팅해줍니다. 그리고 편집해서 수정이 되었을때 다시 수정된 데이터를 보여주어야 하니까 노티를 받아서 데이터를 갱신해줍니다. 
+
+```swift
+
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if let vc = segue.destination.children.first as? ComposeViewController{
+            vc.editTarget = memo
+        }
+    }
+
+    
+    var token: NSObjectProtocol?
+    
+    deinit {
+        if let token = token {
+            NotificationCenter.default.removeObserver(token)
+        }
+    }
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+
+        token = NotificationCenter.default.addObserver(forName: ComposeViewController.memoDidChange, object: nil, queue: OperationQueue.main, using: { [weak self] (noti) in
+            self?.memoTableView.reloadData()
+        })
+    }
+    
+```
+
+그리고 기존 새 메모를 만들던 ComposeViewController에서는 일단 editTarget라는 변수를 만들어서 이 녀석이 존재하는지 안하는지에 따라 새 메모와 편집기능을 사용해야 하니까 분기처리를 해주지요. 또 노티도 각각 다르게 보냅니다. 또 위에서 설명했던 isModalInPresentation와 UITextViewDelegate의 textViewDidChange 메소드를 이용해서 현재 데이터와 수정된 데이터가 같은지 아닌지를 판별하고, 같으면 그냥 pull down이 되도록 처리하고 다르다면 데이터를 수정했다는거니까 pull down할때 얼랏창을 띄워서 (유저가 실수로 풀다운 할수도있는거니까) 이걸 데이터를 갱신할지 말지를 물어봅니다. 상황에 따라서는 이 메모데이터가 굉장히 중요한 데이터일수도 있는 거니까 말이지요. 
+
+```swift 
+
+
+import UIKit
+
+class ComposeViewController: UIViewController {
+    
+    var editTarget: Memo?
+    var originalMemoContent: String?
+
+    @IBAction func close(_ sender: Any) {
+        dismiss(animated: true, completion: nil)
+    }
+    
+    @IBOutlet weak var memoTextView: UITextView!
+        
+    @IBAction func save(_ sender: Any) {
+        
+        guard let memo = memoTextView.text, memo.count > 0 else {
+            alert(message: "메모를 입력하세요.")
+            return
+        }
+        
+//        let newMemo = Memo(content: memo)
+//        Memo.dummyMemoList.append(newMemo)
+        
+        if let target = editTarget {
+            target.content = memo
+            DataManager.shared.saveContext()
+            NotificationCenter.default.post(name: ComposeViewController.memoDidChange, object: nil)
+
+        }else{
+            DataManager.shared.addNewMemo(memo)
+            NotificationCenter.default.post(name: ComposeViewController.newMemoDidInsert, object: nil)
+
+        }
+
+        
+        
+        
+        
+        dismiss(animated: true, completion: nil)
+    }
+    
+    
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+
+       
+        if let memo = editTarget {
+            navigationItem.title = "메모 편집"
+            memoTextView.text = memo.content
+            originalMemoContent = memo.content
+        }else {
+            navigationItem.title = "새 메모"
+            memoTextView.text = ""
+        }
+        
+    
+        memoTextView.delegate = self
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+//        편집화면이 실행되기 직전에 델리게이트 설정
+        navigationController?.presentationController?.delegate = self
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+//        편집화면이 사라지기 직전에 델리게이트 해제
+        navigationController?.presentationController?.delegate = nil
+    }
+    
+
+  
+}
+
+
+extension ComposeViewController {
+    static let newMemoDidInsert = Notification.Name(rawValue: "newMemoDidInsert")
+    static let memoDidChange = Notification.Name(rawValue: "memoDidChange")
+    
+}
+
+
+
+extension ComposeViewController: UITextViewDelegate {
+    func textViewDidChange(_ textView: UITextView) {
+        
+//        하려는 것
+//        메모를 수정하고 풀다운 했을 때, 저장해야할지 물어보기
+//        원본과 지금 고친메모가 다른지 판단
+        if let original = originalMemoContent, let edited = textView.text {
+            if #available(iOS 13.0, *) {
+                //모달방식으로 동작해야하는지 결정하는 플래그
+                //다르다면 속성에 트루가 저장
+                isModalInPresentation = original != edited
+            } else {
+                // Fallback on earlier versions
+            }
+        }
+    }
+    
+}
+
+
+
+extension ComposeViewController : UIAdaptivePresentationControllerDelegate {
+    func presentationControllerDidAttemptToDismiss(_ presentationController: UIPresentationController) {
+        let alert = UIAlertController(title: "확인", message: "편집한 내용을 저장할까요?", preferredStyle: .alert)
+        
+        let okAction = UIAlertAction(title: "확인", style: .default) { [weak self] (action) in
+            self?.save(action)
+        }
+        
+        alert.addAction(okAction)
+        
+        let cancelAction = UIAlertAction(title: "취소", style: .cancel) { [weak self] (action) in
+            self?.close(action)
+        }
+        
+        alert.addAction(cancelAction)
+        
+        present(alert, animated: true, completion: nil)
+    }
+    
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
 
