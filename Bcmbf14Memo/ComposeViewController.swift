@@ -39,14 +39,23 @@ class ComposeViewController: UIViewController {
             NotificationCenter.default.post(name: ComposeViewController.newMemoDidInsert, object: nil)
 
         }
-
-        
-        
-        
         
         dismiss(animated: true, completion: nil)
     }
     
+    
+    var willShowToken: NSObjectProtocol?
+    var willHideToken: NSObjectProtocol?
+    
+    deinit {
+        if let token = willShowToken {
+            NotificationCenter.default.removeObserver(token)
+        }
+        
+        if let token = willHideToken {
+            NotificationCenter.default.removeObserver(token)
+        }
+    }
     
     
     override func viewDidLoad() {
@@ -64,16 +73,59 @@ class ComposeViewController: UIViewController {
         
     
         memoTextView.delegate = self
+        
+        
+        willShowToken = NotificationCenter.default.addObserver(forName: UIResponder.keyboardWillShowNotification, object: nil, queue: OperationQueue.main, using: { [weak self] (noti) in
+            guard let strongSelf = self else { return }
+            
+            if let frame = noti.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue {
+                let height = frame.cgRectValue.height
+                
+//                텍스트뷰의 여백을 조정
+                var inset = strongSelf.memoTextView.contentInset
+                inset.bottom = height
+                strongSelf.memoTextView.contentInset = inset
+                
+//                텍스트뷰 우측 스크롤바의 여백의 조정
+                inset = strongSelf.memoTextView.scrollIndicatorInsets
+                inset.bottom = height
+                strongSelf.memoTextView.scrollIndicatorInsets = inset
+                
+                
+            }
+        })
+        
+        
+        willHideToken = NotificationCenter.default.addObserver(forName: UIResponder.keyboardWillHideNotification, object: nil, queue: OperationQueue.main, using: { [weak self] (noti) in
+            guard let strongSelf = self else { return }
+
+            //현재 텍스트뷰의 인셋을가져오고, bottom값만 수정
+            var inset = strongSelf.memoTextView.contentInset
+            inset.bottom = 0
+            strongSelf.memoTextView.contentInset = inset
+            
+            //마찬가지로 스크롤바도 수정
+            inset = strongSelf.memoTextView.scrollIndicatorInsets
+            inset.bottom = 0
+            strongSelf.memoTextView.scrollIndicatorInsets = inset
+        })
+        
+        
+        
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        
+        memoTextView.becomeFirstResponder()
 //        편집화면이 실행되기 직전에 델리게이트 설정
         navigationController?.presentationController?.delegate = self
     }
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
+        
+        memoTextView.resignFirstResponder()
 //        편집화면이 사라지기 직전에 델리게이트 해제
         navigationController?.presentationController?.delegate = nil
     }
