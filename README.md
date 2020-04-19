@@ -648,7 +648,13 @@ extension ComposeViewController : UIAdaptivePresentationControllerDelegate {
 
 
 
+# 
 
+일단은.. 
+1. achive 활성화 
+2. 테스트플라이트 사용관련 모든것 https://dev-yakuza.github.io/ko/react-native/ios-testflight/
+3. 아이콘 에러처리 https://gogorchg.tistory.com/entry/iOS-Error-ITMS90717-%E2%80%9CInvalid-App-Store-Icon%E2%80%9D
+4. 수출규정 암호화 https://0urtrees.tistory.com/59 처리 
 
 
 
