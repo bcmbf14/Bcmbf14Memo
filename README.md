@@ -643,19 +643,138 @@ extension ComposeViewController : UIAdaptivePresentationControllerDelegate {
     
 }
 
-
-
-
+`````
 
 
 # 
 
-일단은.. 
-1. achive 활성화 
-2. 테스트플라이트 사용관련 모든것 https://dev-yakuza.github.io/ko/react-native/ios-testflight/
-3. 아이콘 에러처리 https://gogorchg.tistory.com/entry/iOS-Error-ITMS90717-%E2%80%9CInvalid-App-Store-Icon%E2%80%9D
-4. 수출규정 암호화 https://0urtrees.tistory.com/59 처리 
 
+___스와이프 삭제기능___
+
+- 스와이프 삭제/삽입 기능을 구현하기 위해서는 데이터소스 메소드 3개가 필요하다. 삽입기능도 있으니 [이 링크](https://developer.apple.com/documentation/uikit/uitableviewcell/editingstyle)를 통해 공부해보도록 해라.    
+- 처음부터 테이블뷰컨트롤러로 만들어 놓으면 주석처리로 이미 만들어져있다. 
+- 유의할 점은 삭제를 할 때, 가져오는 데이터에서도 삭제하고 셀 갯수를 리턴하는 부분에서도 삭제를 해줘서 개수를 통일해줘야 된다는 거다. 
+- iOS13부터는 스와이프를 오른쪽에서 왼쪽으로 쭉~했을시 삭제가 되는 기능도 있다. 
+
+````swift
+
+ // Override to support conditional editing of the table view.
+    //    편집 기능이 활성화
+    override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
+        // Return false if you do not want the specified item to be editable.
+        return true
+    }
+    
+    
+    override func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCell.EditingStyle {
+        return .delete
+    }
+    
+    
+    // Override to support editing the table view.
+    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+        if editingStyle == .delete {
+            
+            let target = DataManager.shared.memoList[indexPath.row]
+            DataManager.shared.deleteMemo(target)
+            DataManager.shared.memoList.remove(at: indexPath.row)
+            tableView.deleteRows(at: [indexPath], with: .fade)
+        } else if editingStyle == .insert {
+            // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
+        }
+    }
+    
+````
+
+
+# 
+
+
+___**공유 기능___
+
+- 이거 생각보다 되게 많이쓰는데, 생각보다 매우 간단하다. UIActivityViewController를 생성해서 데이터를 넣어주고 얼랏불러오는것처럼 불러오기만 하면된다. 
+- 유의할 점은 본인 휴대폰에 설치된 앱에 따라서 공유할 수 있는 앱이 많이나오고 적게나오고 정도가 있다. 시뮬레이터에서 실행하면 몇개 안나온다. 
+- 또, activityItems에 데이터를 넣고있는데 [Any] 타입이다. 여기서 이미지를 넣게되면 카메라, 사진앨범 등 이미지 관련 앱이 자동으로 나오고 문자열을 넣게되면 메시지, 카카오톡, 슬랙같은 메시지를 공유할 수 있는 앱이 자동으로 나온다. 
+- 당연?하게도 아이패드도 지원하는데, 앱에서 불러오는 것처럼 그대로 UIActivityViewController만 호출하면 앱이 터진다. 이유는 아이패드는 화면이 크기 때문에 팝오버로 화면이 다 차면 이상하니까 팝오버기능을 쓰기 위해서는 어떤뷰 또는 어떤 바버튼에서 팝오버를 불러오는지 지정해줘야 한다. 그러면 이제 구석에 적당한 크기로 팝오버 창이 나오게 된다. 이걸 관리하는 객체가 [popoverPresentationController](https://developer.apple.com/documentation/uikit/uiviewcontroller/1621428-popoverpresentationcontroller)이다. UIActivityViewController의 속성으로 아래처럼 popoverPresentationController 라는 녀석이 있는데, 이녀석의 리턴값이 popoverPresentationController이다. 그래서 여기에 바버튼이 팝오버가 호출될 바버튼이다라고 지정해주면 되겠다. 
+
+````swift
+
+    @IBAction func share(_ sender: UIBarButtonItem) {
+        
+        guard let memo = memo?.content else { return }
+        
+        let vc = UIActivityViewController(activityItems: [memo], applicationActivities: nil)
+        
+        if let pc = vc.popoverPresentationController {
+            pc.barButtonItem = sender
+        }
+        
+        present(vc, animated: true, completion:  nil)
+        
+    }
+    
+````
+
+
+# 
+
+
+___**다크 모드___
+
+- 앤간한 기능은 적당히 다 바뀌게 된다. 문제는 역시 컬러인데 다크모드를 지원하는 컬러들이 있다. 컬러값 앞에 Secondary... , System... 따위의 접두사가 붙은 것들이다. 근데 이제 문제는 커스텀 컬러를 쓰게될때의 문제겠지? 
+- 혹시나역시나이게도 다크모드에서 쓸 수 있는 컬러를 만들어 줄 수 있다. 아래의 사진과 같은데, 코드로 만드는 법도 분명히 당연히 있을거다. 찾아봐라.
+![image](https://user-images.githubusercontent.com/60660894/79701860-5b557f80-82db-11ea-8970-8f0b51e562bd.png)
+- 컬러셋이 만들어지면, 컬러의 이름은 마음대로 정해주고 만들어진 컬러를 클릭하고 아래 사진처럼 다크모드에 적용할 컬러를 또 만들어준다. 
+![image](https://user-images.githubusercontent.com/60660894/79701877-8cce4b00-82db-11ea-90f1-63788f28c94d.png)
+- 이 기능의 이름을 '네임드'컬러라고 하는데 유의할점은 이 기능은 iOS11부터 나왔기 때문에 타겟이 iOS11이하를 지원한다면 에러가 발생한다. 그래서 아래처럼 분기처리를 해주면 되겠다. 
+````swift
+
+    if #available(iOS 11.0, *) {
+            cell.detailTextLabel?.textColor = UIColor(named: "MyLabelColor")
+        } else {
+            cell.detailTextLabel?.textColor = .lightGray
+        }
+        
+````
+
+# 
+
+
+___**iPad 지원___
+
+- 아이패드를 지원하는 것도 오토레이아웃만 잘 잡아놓는다면 큰 문제는 발생하지 않는다. 동작도 정상동작하고, 위에서 이미 말했던 팝오버기능같은 것들을 제외하고 말이다. 그런데 이제 화면이 커졌으니까 글씨크기정도는 좀 커져야지 않겠나? 글씨크기는 자동으로 커지지 않는다. 따로 지정해줘야 한다. 어떻게 보면 이게 매우 중요한 부분이긴 하다. 
+- iOS에서는 기기 크기에 따라 어떤 그 사이즈의 기준을 정해놓았다. 뭐 아이폰 몇은 글씨크기가 뭐, 뭐, 이런 느낌이 아니다. 아래 사진을 보면 알 수 있지만 바로 compact와 regular이다. 그래서 attribute inspector에서 font 좌측에 +을 눌러보면 아래처럼 화면이 뜨는데 여기서 width, height를 선택해서 폰트를 생성해준다. 그러면 이런 뜻이 된다. `width가 R이고 height가 R인 기기에서는 글씨크기와 폰트를 이것으로 한다.` 처럼 말이다. 
+![image](https://user-images.githubusercontent.com/60660894/79701988-593ff080-82dc-11ea-9483-17273e99d76a.png)
+이것들의 기준은 아래 사진처럼 스토리보드 아래 메뉴쪽에 친절히도 나와있다. 또한 아래 메뉴에서 다크모드/라이트모드를 각각 테스팅 할 수도 있다. 
+![image](https://user-images.githubusercontent.com/60660894/79702037-c6538600-82dc-11ea-8dec-e00bdc7371d3.png)
+
+
+# 
+
+
+___Mac Catalyst___
+
+- 이 기능은 간단히 설명하면 내 앱을 맥OS에서 실행할 수 있는 기능이다. 다만 iOS13부터 추가되서 아직 불안정하다. 1,2년 정도는 있어야 제대로 사용할 수 있지 싶다. 사용방법은 매우 간단하다. mac을 체크해주고 my mac으로 실행하면 된다. 
+![image](https://user-images.githubusercontent.com/60660894/79702098-24806900-82dd-11ea-9944-370e4176cbf8.png)
+![image](https://user-images.githubusercontent.com/60660894/79702122-65787d80-82dd-11ea-9432-1b8e3e6d2f77.png)
+
+
+# 
+
+
+___TestFlight Issue___
+
+- 앱을 다 완성하고 나서 테스트를 해보려고 테스트플라이트에 업로드 하는 과정에서 꽤나 이슈가 있었다. 그걸 정리해보겠다. 
+- 첫째로는, 앱스토어 커넥트에 앱을 업로드해야 하는데 achive menu가 활성화되지않는 문제였다. 이것은 간단하게도 지금 실행 타겟이 시뮬레이터여서 그랬단다. 내 개인 기기를 선택하거나 Generic iOS Device를 클릭하면 해결된다. 
+![image](https://user-images.githubusercontent.com/60660894/79702138-893bc380-82dd-11ea-9e64-01debecd6d18.png)
+- 둘째는, 앱스토어 커넥트에 업로드를 하는데 자꾸 에러가 뜨는거다. 앱아이콘이 어쨋다나 저쨋다나 관련한 것들인데, 나는 그 앱아이콘 자체가 문제인줄 알았다. 아이폰의 앱 아이콘은 아예 동그라미도아니고 아예네모도 아니지않나? 그래서 아예동그라미 아이콘을 세팅하면 동그라미 주변이 비어버려서 그것때문제 문제인줄알았다. 에러메시지도 그와 유사했고,, 근데 아니었다. 일단 에러메시지를 보면...
+![image](https://user-images.githubusercontent.com/60660894/79702203-1bdc6280-82de-11ea-8482-9993efe1484e.png)
+메시지를 읽어보면 앱스토어의 아이콘은 알파채널?을 넣지 말라고 하는거다. 난 그래서 위에 말한 것처럼 그것 때문인 줄 알았다. 근데 그게 아니었고, 그냥 무슨 포맷 관련한 문제인가보다. 재밌는건 앱스토어의 아이콘인 1024x1024만 해결하면 업로드가 잘된다. [참고링크]()는 여기에 있고, 간단히 설명하자면 해당 이미지를 클릭해서 미리보기?같은걸 열고 그걸 파일->내보내기->포맷아래의 알파 체크해제를 하고 그 이미지를 xcode 아이콘에 덮어쓰기 하면 된다. 
+![image](https://user-images.githubusercontent.com/60660894/79702269-93aa8d00-82de-11ea-8473-4c34e4715d98.png)
+![image](https://user-images.githubusercontent.com/60660894/79702277-a3c26c80-82de-11ea-84bb-70a2c2065348.png)  
+- 셋쨰로는, 그렇게 열심히 앱스토어 커넥트에 업로드를 했더니 수출규정 암호화가 어쩃다니 하는거다. 이건 나중에 다시 공부해보고 어이없게도 경고창을 없애려면 암호화 하지 않음 이라고 체크만 해주면 된다. 아니요 선택.
+![image](https://user-images.githubusercontent.com/60660894/79702307-e2582700-82de-11ea-9686-4ebc0ed12882.png)
+- 그리고 이제 테스트를 하려면 또 간단한 심사를 받아야 해서 심사신청을 넣는다. 심사가 완료되면 테스트가 가능하며, 테스터들을 추가해서 테스트를 진행할 수 있다. 유의할점은 테스트들의 이메일로 ipa파일 다운로드 링크가 가는데 그게 아마 애플 이메일, 비밀번호여야 된다는 것 같다. 
 
 
 
