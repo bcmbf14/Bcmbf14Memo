@@ -302,25 +302,6 @@ ___LineBreakMode___
 또 하나 배운게 이제 LineBreakMode인데, 굉장히 어떻게보면 디테일한 부분이다. 이름 그대로 레이블의 텍스트가 라인을 넘어가게되면 어떻게 처리해줄지에 관한 내용인데 ...을 앞에 해주거나 가운데해주거나 끝에해주거나같은 속성도 있고, 또 뭐 특정 단어에서 끝에 걸린다고하면 바로 줄바꿈을 해준다던지(word wrap)하는 속성이 있다. 해당 [링크](https://developer.apple.com/documentation/uikit/nslinebreakmode)에서 추가로 공부해보도록 하자. 
 
 
-# 
-
-
-___접기펼치기테스트___
-
-
-<details markdown="1">
-<summary>펼치기Show/접기Hide</summary>
-
-### 여기다가 내용을 적으면 되나?
-- 이렇게? 
-- 이렇게?
-  - 아니면 이렇게? 
-# 
-
-괜찮네..ㅎㅎ 
-
-</details>
-
 
 # 
 
