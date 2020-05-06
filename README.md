@@ -3,6 +3,8 @@
 ___배운점과 추가로 공부해야될 부분들 정리___
 
 [gogo 아래로](#stack-program)
+[gogo 아래로1](#바보멍청이)
+[gogo 아래로2](# 바보멍청이)
 
 
 # 
@@ -448,6 +450,7 @@ class DataManager {
 
 # 
 
+#바보멍청이
 
 ___메모 편집___
 
@@ -494,7 +497,7 @@ DetailViewController에서는 prepare메소드를 이용해서 새 메모화면�
     }
     
 ```
-
+# 바보멍청이
 그리고 기존 새 메모를 만들던 ComposeViewController에서는 일단 editTarget라는 변수를 만들어서 이 녀석이 존재하는지 안하는지에 따라 새 메모와 편집기능을 사용해야 하니까 분기처리를 해주지요. 또 노티도 각각 다르게 보냅니다. 또 위에서 설명했던 isModalInPresentation와 UITextViewDelegate의 textViewDidChange 메소드를 이용해서 현재 데이터와 수정된 데이터가 같은지 아닌지를 판별하고, 같으면 그냥 pull down이 되도록 처리하고 다르다면 데이터를 수정했다는거니까 pull down할때 얼랏창을 띄워서 (유저가 실수로 풀다운 할수도있는거니까) 이걸 데이터를 갱신할지 말지를 물어봅니다. 상황에 따라서는 이 메모데이터가 굉장히 중요한 데이터일수도 있는 거니까 말이지요. 
 
 ```swift 
