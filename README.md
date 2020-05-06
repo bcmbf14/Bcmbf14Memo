@@ -2,6 +2,9 @@
 
 ___배운점과 추가로 공부해야될 부분들 정리___
 
+[gogo 아래로](#stack-program)
+
+
 # 
 
 ___프로젝트 생성___
@@ -629,6 +632,7 @@ extension ComposeViewController : UIAdaptivePresentationControllerDelegate {
 
 # 
 
+#Stack Program
 
 ___스와이프 삭제기능___
 
